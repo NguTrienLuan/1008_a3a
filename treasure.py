@@ -21,6 +21,37 @@ class Treasure:
     def __eq__(self, value: object) -> bool:
         # Do not monitfy this function
         return isinstance(value, Treasure) and value.value == self.value and value.weight == self.weight
+    
+        # def __gt__(self, value: object):
+        #     return isinstance(value, Treasure) and (value.value/value.weight) > (self.value/self.weight) or (value.value/value.weight) < (self.value/self.weight)
+        
+        # def __lt__(self, value: object):
+        #     return isinstance(value, Treasure) and (value.value/value.weight) < (self.value/self.weight) or (value.value/value.weight) > (self.value/self.weight)
+        
+        # def __ge__(self, value: object):
+        #     return isinstance(value, Treasure) and (value.value/value.weight) >= (self.value/self.weight) or (value.value/value.weight) <= (self.value/self.weight)
+        
+        # def __le__(self, value: object):
+        #     return isinstance(value, Treasure) and (value.value/value.weight) <= (self.value/self.weight) or (value.value/value.weight) >= (self.value/self.weight)
+    def __gt__(self, value: object) -> bool:
+        if isinstance(value, Treasure):
+            return (self.value / self.weight) > (value.value / value.weight) if value.weight > 0 else True
+        return NotImplemented
+
+    def __lt__(self, value: object) -> bool:
+        if isinstance(value, Treasure):
+            return (self.value / self.weight) < (value.value / value.weight) if value.weight > 0 else False
+        return NotImplemented
+
+    def __ge__(self, value: object) -> bool:
+        if isinstance(value, Treasure):
+            return (self.value / self.weight) >= (value.value / value.weight) if value.weight > 0 else True
+        return NotImplemented
+
+    def __le__(self, value: object) -> bool:
+        if isinstance(value, Treasure):
+            return (self.value / self.weight) <= (value.value / value.weight) if value.weight > 0 else False
+        return NotImplemented
 
     def __str__(self) -> str:
         return f"Treasure: {self.value} ({self.weight}kg)"

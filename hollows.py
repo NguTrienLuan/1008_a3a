@@ -12,6 +12,7 @@ from typing import List
 
 from config import Tiles
 from treasure import Treasure, generate_treasures
+from data_structures.heap import MaxHeap
 
 
 class Hollow(ABC):
@@ -83,7 +84,11 @@ class SpookyHollow(Hollow):
             Worst Case Complexity: O(n log n)
             Where n is the number of treasures in the hollow
         """
-        raise NotImplementedError
+        length = len(self.treasures)
+        lst = self.treasures
+        self.new_heap = MaxHeap(length)
+        self.treasures = self.new_heap.heapify(lst)
+        
 
     def get_optimal_treasure(self, backpack_capacity: int) -> Treasure | None:
         """
@@ -112,7 +117,28 @@ class SpookyHollow(Hollow):
             Worst Case Complexity: O(n)
             n is the number of treasures in the hollow 
         """
-        raise NotImplementedError
+        temp_lst = []
+        if len(self.treasures) <= 0:
+            return None
+        
+        while len(self.treasures) > 0:
+            max_val: Treasure = self.treasures.get_max()
+            
+            # Check if the current treasure's weight is within the backpack capacity
+            if max_val.weight <= backpack_capacity:
+                # Put back all temporarily removed treasures before returning
+                for item in temp_lst:
+                    self.treasures.add(item)
+                return max_val
+            
+            # If not, add it to the temporary list and continue
+            temp_lst.append(max_val)
+        
+        # If no treasure meets the capacity requirement, restore heap and return None
+        for item in temp_lst:
+            self.treasures.add(item)
+        
+        return None
 
     def __str__(self) -> str:
         return Tiles.SPOOKY_HOLLOW.value
@@ -145,7 +171,10 @@ class MysticalHollow(Hollow):
             Worst Case Complexity: O(n)
             Where n is the number of treasures in the hollow
         """
-        raise NotImplementedError
+        length = len(self.treasures)
+        lst = self.treasures
+        self.new_heap = MaxHeap(length)
+        self.treasures = self.new_heap.heapify(lst)
 
     def get_optimal_treasure(self, backpack_capacity: int) -> Treasure | None:
         """
@@ -174,10 +203,51 @@ class MysticalHollow(Hollow):
             Worst Case Complexity: O(n log n)
             Where n is the number of treasures in the hollow
         """
-        raise NotImplementedError
+        temp_lst = []
+        if len(self.treasures) <= 0:
+            return None
+        
+        # max_val: Treasure = self.treasures.get_max()
+        # while self.treasures:
+        #     max: Treasure = self.treasures.get_max()
+        # print(f"Value: {max_val.value}")
+        # print(f"Weight: {max_val.weight}")
+        # print(f"Ration: {max_val.value / max_val.weight}")
+
+        # while not max.weight <= backpack_capacity and len(self.treasures) != 0:
+        #     temp_lst.append(max)
+        #     max: Treasure = self.treasures.get_max()
+        # if max.weight <= backpack_capacity:
+            # for item in temp_lst:
+            #     self.treasures.add(item)
+            # print(f"Value: {max.value}")
+            # print(f"Weight: {max.weight}")
+            # print(f"Ration: {max.value / max.weight}")
+            # return max
+        while len(self.treasures) > 0:
+            max_val: Treasure = self.treasures.get_max()
+            
+            # Check if the current treasure's weight is within the backpack capacity
+            if max_val.weight <= backpack_capacity:
+                # Put back all temporarily removed treasures before returning
+                for item in temp_lst:
+                    self.treasures.add(item)
+                return max_val
+            
+            # If not, add it to the temporary list and continue
+            temp_lst.append(max_val)
+        
+        # If no treasure meets the capacity requirement, restore heap and return None
+        for item in temp_lst:
+            self.treasures.add(item)
+        
+        return None
+
+            
 
     def __str__(self) -> str:
         return Tiles.MYSTICAL_HOLLOW.value
 
     def __repr__(self) -> str:
         return str(self)
+    
