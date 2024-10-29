@@ -76,8 +76,8 @@ class SpookyHollow(Hollow):
         Complexity:
             (This is the actual complexity of your code, 
             remember to define all variables used.)
-            Best Case Complexity: TODO
-            Worst Case Complexity: TODO
+            Best Case Complexity: O(nlogn), where n is the number of treasures in the hollow
+            Worst Case Complexity: O(nlogn), where n is the number of treasures in the hollow
 
         Complexity requirements for full marks:
             Best Case Complexity: O(n log n)
@@ -109,30 +109,29 @@ class SpookyHollow(Hollow):
         Complexity:
             (This is the actual complexity of your code, 
             remember to define all variables used.)
-            Best Case Complexity: TODO
-            Worst Case Complexity: TODO
+            Best Case Complexity: o(logn), where n is the number of treasures in the hollow
+            Worst Case Complexity: o(n), where n is the number of treasures in the hollow
 
         Complexity requirements for full marks:
             Best Case Complexity: O(log(n))
             Worst Case Complexity: O(n)
             n is the number of treasures in the hollow 
         """
-        temp_lst = []
-        if len(self.treasures) <= 0:
+        if self.treasures.length <= 0:
             return None
-        
-        while len(self.treasures) > 0:
-            max_val: Treasure = self.treasures.get_max()
-            if max_val.weight <= backpack_capacity:
-                for item in temp_lst:
-                    self.treasures.add(item)
-                return max_val
-            
-            temp_lst.append(max_val)
-        
+
+        temp_lst = []
+        found_treasure = False
+        while self.treasures.length > 0:
+            max_treasure: Treasure = self.treasures.get_max() #o(logn)
+            if max_treasure.weight <= backpack_capacity:
+                found_treasure = True
+                return max_treasure
+            else:
+                temp_lst.append(max_treasure)
         for item in temp_lst:
-            self.treasures.add(item)
-        
+            self.treasures.add(item) #o(logn)
+
         return None
 
     def __str__(self) -> str:
@@ -158,8 +157,8 @@ class MysticalHollow(Hollow):
         Complexity:
             (This is the actual complexity of your code, 
             remember to define all variables used.)
-            Best Case Complexity: TODO
-            Worst Case Complexity: TODO
+            Best Case Complexity: o(n), where n is the number of treasures in the hollow
+            Worst Case Complexity: o(n), where n is the number of treasures in the hollow
 
         Complexity requirements for full marks:
             Best Case Complexity: O(n)
@@ -167,9 +166,8 @@ class MysticalHollow(Hollow):
             Where n is the number of treasures in the hollow
         """
         length = len(self.treasures)
-        lst = self.treasures
         self.new_heap = MaxHeap(length)
-        self.treasures = self.new_heap.heapify(lst)
+        self.treasures = self.new_heap.heapify(self.treasures) 
 
     def get_optimal_treasure(self, backpack_capacity: int) -> Treasure | None:
         """
@@ -190,8 +188,8 @@ class MysticalHollow(Hollow):
         Complexity:
             (This is the actual complexity of your code, 
             remember to define all variables used.)
-            Best Case Complexity: TODO
-            Worst Case Complexity: TODO
+            Best Case Complexity: O(logn), where n is the number of treasures in the hollow
+            Worst Case Complexity: O(nlogn), where n is the number of treasures in the hollow
 
         Complexity requirements for full marks:
             Best Case Complexity: O(log n)

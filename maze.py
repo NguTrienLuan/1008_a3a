@@ -197,10 +197,10 @@ class Maze:
             bool - True if the position is within the maze and not blocked by a wall.
 
         Complexity:
-            Best Case Complexity: TODO
-            Worst Case Complexity: TODO
+            Best Case Complexity: o(1)
+            Worst Case Complexity: o(1)
         """
-        
+
         if not (0 <= position.row < self.rows and 0 <= position.col < self.cols):
             return False
 
@@ -222,8 +222,8 @@ class Maze:
             List[Position] - A list of all the new possible you can move to from your current position.
 
         Complexity:
-            Best Case Complexity: TODO
-            Worst Case Complexity: TODO
+            Best Case Complexity: o(1)
+            Worst Case Complexity: o(1)
         """
         valid_pos = []
 
@@ -249,8 +249,8 @@ class Maze:
             None: Unable to find a path to the exit, simply return None.
 
         Complexity:
-            Best Case Complexity: TODO
-            Worst Case Complexity: TODO
+            Best Case Complexity: o(1), the exit found straight away
+            Worst Case Complexity: o(n), visited all the position without finding an exit
         """
         start: Position = self.start_position
         path = []
@@ -302,8 +302,9 @@ class Maze:
             None - If there are no treasures to take.
 
         Complexity:
-            Best Case Complexity: TODO
-            Worst Case Complexity: TODO
+            Best Case Complexity: O(mlogn), where m is number of position in the path and n is average number of treasures in the hollows
+            Worst Case Complexity: o(m nlogn), where m is number of position in the path and n is average number of treasures in the hollows for Mystical Hollows
+                                    o(m n),  where m is number of position in the path and n is average number of treasures in the hollows for Spooky Hollows
 
         """
         list_of_treasures = []

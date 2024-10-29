@@ -27,8 +27,8 @@ class BetterBST(BinarySearchTree[K, I]):
             elements(List[tuple[K, I]]): The elements to be inserted into the tree.
 
         Complexity:
-            Best Case Complexity: TODO
-            Worst Case Complexity: TODO
+            Best Case Complexity: O(nlogn), n is the number of elements in the list
+            Worst Case Complexity: O(nlogn), n is the number of elements in the list
         """
         super().__init__()
         new_elements: List[Tuple[K, I]] = self.__sort_elements(elements)
@@ -47,8 +47,8 @@ class BetterBST(BinarySearchTree[K, I]):
             list(Tuple[K, I]]) - elements after being sorted.
 
         Complexity:
-            Best Case Complexity: TODO
-            Worst Case Complexity: TODO
+            Best Case Complexity: O(nlogn), n is the number of elements in the list
+            Worst Case Complexity: O(nlogn), n is the number of elements in the list
         """
         
         sorted_elements = mergesort(elements, lambda x: elements[0])
@@ -67,11 +67,15 @@ class BetterBST(BinarySearchTree[K, I]):
         Complexity:
             (This is the actual complexity of your code, 
             remember to define all variables used.)
-            Best Case Complexity: TODO
-            Worst Case Complexity: TODO
+            Best Case Complexity: O(nlogn), n is the number of elements in the list
+            Worst Case Complexity: O(nlogn), n is the number of elements in the list
 
         Justification:
-            TODO
+            - The method constructs a balanced binary search tree by recursively dividing 
+            the list of elements into two halves at each level of recursion 
+            - Each level processes all elements, contributing to a linear time cost per level
+            - Since the depth of recursion is o(logn) due to the halving process 
+            the overall complexity is o(nlogn) for both the best and worst cases, where n is the number of elements in the list.
 
         Complexity requirements for full marks:
             Best Case Complexity: O(n * log(n))
