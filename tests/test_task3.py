@@ -171,6 +171,7 @@ class TestTask3(TestCase):
         self.assertEqual(student_result, None, f"Expected no treasures to be taken instead got {student_result}")
         # constrained by stamina
         student_result: List[Treasure] | None = self.maze.take_treasures(path, 50)
+        print("RESULT: ", student_result)
         self.assertEqual(student_result, [Treasure(45, 4)], f"To take just one treasure from the first spooky hollow instead got: {student_result}")
         # Refill the hollows
         self.force_hollows(treasures)

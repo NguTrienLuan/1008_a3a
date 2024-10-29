@@ -200,7 +200,24 @@ class Maze:
             Best Case Complexity: TODO
             Worst Case Complexity: TODO
         """
-        raise NotImplementedError
+
+        # if (position.row > self.rows) or (position.col > self.cols) or (position.row < 0) or (position.col < 0) :
+        #     return False
+        # elif (self.grid[position.row][position.col].tile == Tiles.WALL.value) or (self.grid[position.row][position.col].visited):
+        #     return False
+        # else:
+        #     return True
+
+        if not (0 <= position.row < self.rows and 0 <= position.col < self.cols):
+            return False
+        
+        # Then, check if the cell is a wall or already visited
+        cell = self.grid[position.row][position.col]
+        if cell.tile == Tiles.WALL.value or cell.visited:
+            return False
+
+        return True
+        
 
     def get_available_positions(self, current_position: Position) -> List[Position]:
         """
@@ -216,8 +233,16 @@ class Maze:
             Best Case Complexity: TODO
             Worst Case Complexity: TODO
         """
+        valid_pos = []
 
-        raise NotImplementedError
+        for direction in Directions:
+            next_position = Position(
+                    current_position.row + Maze.directions[direction][0], current_position.col + Maze.directions[direction][1])
+            if self.is_valid_position(next_position):
+                valid_pos.append(next_position)
+            
+        return valid_pos
+
 
     def find_way_out(self) -> List[Position] | None:
         """
@@ -236,7 +261,88 @@ class Maze:
             Worst Case Complexity: TODO
         """
         start: Position = self.start_position
-        raise NotImplementedError
+        path = []
+        path.append(start)
+        res = self.find_way_out_aux(start, path)
+        return res
+
+
+    def find_way_out_aux(self, position: Position, path: List):
+        # # print("Times: ", time)
+        # self.grid[position.row][position.col].visited = True
+        # list_of_pos = self.get_available_positions(position)
+        # if self.grid[position.row][position.col].tile == Tiles.EXIT.value:
+        #     print("CURRENT EXIT: ", position)
+        #     path.append(position)
+        #     for pos in path:
+        #         print("FINAL PATH: ", pos)
+                
+        #     # print(f"Exit poisition: {position}")
+        #     print(type(path))
+        #     return path
+        
+        # elif len(list_of_pos) == 0:
+        #     new_path = path[:-1]
+        #     temp_pos = new_path[-1]
+        #     print("TOTAL ROWS: ", self.rows)
+        #     print("TOTAL COLS: ", self.cols)
+        #     print("TEMP: ", temp_pos)
+
+        #     for pos in path:
+        #         print("Before: ", pos)
+
+        #     for pos in new_path:
+        #         print("Before NEW PATH: ", pos)
+        #     lst = self.get_available_positions(temp_pos)
+        #     print("LEN: ",len(lst))
+        #     if len(lst) == 0:
+        #         print(temp_pos)
+        #         return None
+        #     next_position: Position = lst[0]
+        #     new_path.append(next_position)
+        #     for pos in new_path:
+        #         print("AFTER NEW PATH: ", pos)
+        #     # self.grid[next_position.row][next_position.col].visited = True
+        #     print("NEXT POS: ", next_position)
+        #     print("CURRENT POS: ", position)
+            
+        #     # print(f"Backtrack from {temp} to {next_position}")
+
+        #     self.find_way_out_aux(next_position, new_path)
+        
+        # else:
+        #     next_position: Position = list_of_pos[0]
+        #     # if self.is_valid_position(next_position):
+        #     path.append(next_position)
+        #     # print(f"Move from {position} to {next_position}")
+        #     self.find_way_out_aux(next_position, path)        
+        self.grid[position.row][position.col].visited = True
+        if self.grid[position.row][position.col].tile == Tiles.EXIT.value:
+            # for pos in path:
+            #     print("FINAL PATH: ", pos)
+            return path
+
+        # Get available positions to move from the current position
+        list_of_pos = self.get_available_positions(position)
+
+        if not list_of_pos:  # If there are no available positions, backtrack
+            if len(path) > 1:
+                # Remove the last position and backtrack to the previous one
+                new_path = path[:-1]
+                temp_pos = new_path[-1]
+                return self.find_way_out_aux(temp_pos, new_path)
+            return None
+
+        # Try the first available position
+        next_position: Position = list_of_pos[0]
+        if next_position not in path:  # Avoid cycles
+            path.append(next_position)
+            result = self.find_way_out_aux(next_position, path)
+            if result is not None:  # If a path is found, propagate it back up
+                return result
+
+        # If no path is found from this position, backtrack
+        return None
 
     def take_treasures(self, path: List[MazeCell], backpack_capacity: int) -> List[Treasure] | None:
         """
@@ -262,7 +368,34 @@ class Maze:
             Worst Case Complexity: TODO
 
         """
-        raise NotImplementedError
+        list_of_treasures = []
+        total_weight = 0
+        for pos in path:
+            # print(f"Checking position: {pos}")
+            # print("FORMAT OF THE TILE: ", pos.tile)
+            # print("SPOOKY TILE: ", Tiles.MYSTICAL_HOLLOW.value)
+            # print("TRUE OF FALSE: ", pos.tile == Tiles.MYSTICAL_HOLLOW.value)
+            # Check if the position contains a treasure tile
+            if pos.tile == Tiles.MYSTICAL_HOLLOW or pos.tile == Tiles.SPOOKY_HOLLOW:
+                remaining_capacity = backpack_capacity - total_weight
+                print(f"Remaining capacity: {remaining_capacity}")
+
+                # Get the optimal treasure for the remaining capacity
+                treasure = pos.tile.get_optimal_treasure(remaining_capacity)
+                print(f"Found treasure: {treasure}")
+
+                if treasure and treasure.weight <= remaining_capacity:
+                    list_of_treasures.append(treasure)
+                    total_weight += treasure.weight
+                    print(f"Added treasure: {treasure}, total weight: {total_weight}")
+
+        # Return None if no treasures were found
+        if list_of_treasures:
+            print(f"Treasures taken: {list_of_treasures}")
+            return list_of_treasures
+        else:
+            print("No treasures found.")
+            return None
 
     def __repr__(self) -> str:
         return str(self)

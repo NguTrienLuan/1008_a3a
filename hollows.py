@@ -123,18 +123,13 @@ class SpookyHollow(Hollow):
         
         while len(self.treasures) > 0:
             max_val: Treasure = self.treasures.get_max()
-            
-            # Check if the current treasure's weight is within the backpack capacity
             if max_val.weight <= backpack_capacity:
-                # Put back all temporarily removed treasures before returning
                 for item in temp_lst:
                     self.treasures.add(item)
                 return max_val
             
-            # If not, add it to the temporary list and continue
             temp_lst.append(max_val)
         
-        # If no treasure meets the capacity requirement, restore heap and return None
         for item in temp_lst:
             self.treasures.add(item)
         
@@ -206,44 +201,17 @@ class MysticalHollow(Hollow):
         temp_lst = []
         if len(self.treasures) <= 0:
             return None
-        
-        # max_val: Treasure = self.treasures.get_max()
-        # while self.treasures:
-        #     max: Treasure = self.treasures.get_max()
-        # print(f"Value: {max_val.value}")
-        # print(f"Weight: {max_val.weight}")
-        # print(f"Ration: {max_val.value / max_val.weight}")
-
-        # while not max.weight <= backpack_capacity and len(self.treasures) != 0:
-        #     temp_lst.append(max)
-        #     max: Treasure = self.treasures.get_max()
-        # if max.weight <= backpack_capacity:
-            # for item in temp_lst:
-            #     self.treasures.add(item)
-            # print(f"Value: {max.value}")
-            # print(f"Weight: {max.weight}")
-            # print(f"Ration: {max.value / max.weight}")
-            # return max
         while len(self.treasures) > 0:
             max_val: Treasure = self.treasures.get_max()
-            
-            # Check if the current treasure's weight is within the backpack capacity
             if max_val.weight <= backpack_capacity:
-                # Put back all temporarily removed treasures before returning
                 for item in temp_lst:
                     self.treasures.add(item)
                 return max_val
-            
-            # If not, add it to the temporary list and continue
             temp_lst.append(max_val)
-        
-        # If no treasure meets the capacity requirement, restore heap and return None
         for item in temp_lst:
             self.treasures.add(item)
-        
         return None
 
-            
 
     def __str__(self) -> str:
         return Tiles.MYSTICAL_HOLLOW.value
